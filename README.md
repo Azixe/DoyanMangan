@@ -7,13 +7,14 @@
 - Farrel Rajendra (2211102254) [Testing]
 
 
+## Spesifikasi
 
-Nama Aplikasi : DoyanMangan
+**Nama Aplikasi** : DoyanMangan
 
-Bahasa Pemrograman : HTML, CSS, JS, Node JS, ReactJS
+**Bahasa Pemrograman** : HTML, CSS, JS, Node JS, ReactJS
 
-Database : MongoDB
+**Database** : MongoDB
 
-Base Aplikasi : Web
+**Base Aplikasi** : Web
 
-Desain Aplikasi : Figma
+**Desain Aplikasi** : Figma
