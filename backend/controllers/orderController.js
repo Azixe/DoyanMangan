@@ -13,6 +13,8 @@ export const placeOrder = async (req, res) => {
         })
         await newOrder.save();
         await userModel.findByIdAndUpdate(req.body.userID,{cartData:{}})
+        //masih ada method yang belom di add seperti payment, belom setup api nya
+
     } catch (error) {
         
     }
