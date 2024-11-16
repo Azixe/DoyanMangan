@@ -18,11 +18,20 @@ a{
 }
 
 hr{
-  border: none;
   height: 1px;
   background-color: #a9a9a9;
 }
 
-.app{
+.app-content{
   display: flex;
+}
+
+.flex-col{
+  display: flex;
+  flex-direction: column;
+  gap: 10;
+}
+
+.cursor{
+  cursor: pointer;
 }
