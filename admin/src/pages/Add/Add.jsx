@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './Add.css'
-import { assets } from '../../assets/assets'
+import { assets, url } from '../../assets/assets'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-const Add = (url) => {
+
+const Add = ({url}) => {
 
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
@@ -23,7 +24,7 @@ const Add = (url) => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const formData = new formData();
+    const formData = new FormData();
     formData.append('name', data.name)
     formData.append('description', data.description)
     formData.append('price',Number(data.price))
