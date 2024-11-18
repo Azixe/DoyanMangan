@@ -1,9 +1,12 @@
 import express from "express"
-//unfinished. need authentication
-import { placeOrder } from "../controllers/orderController.js"
+import { placeOrder, verifyOrder, userOrders } from "../controllers/orderController.js"
+import authMiddleware from "../middleware/auth.js";
 
 const orderRouter = express.Router()
 
-orderRouter.post("/place",placeOrder);//authentication lom di implement
+orderRouter.post("/place", authMiddleware ,placeOrder);//authentication lom di implement
+orderRouter.post("/verify", verifyOrder)
+orderRouter.post("/userorders", authMiddleware, userOrders )
+
 
 export default orderRouter;
