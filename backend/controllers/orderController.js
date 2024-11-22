@@ -1,80 +1,93 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
-import Stripe from "stripe";
+import midtransClient from "midtrans-client";
 
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const snap = new midtransClient.Snap({
+    isProduction: false, // Sandbox environment
+    serverKey: "SB-Mid-server-Ugm0EYBJ0swMLaLuMX2uJeNY",
+});
 
-//menempatkan order untuk frontend
- const placeOrder = async (req, res) => {
-
-    const frontend_url = "http://localhost:5173"
-
+const placeOrder = async (req, res) => {
     try {
+        const userData = await userModel.findById(req.body.userId);
+        const cartData = userData.cartData;
+
+        if (!cartData || Object.keys(cartData).length === 0) {
+            return res.json({ success: false, message: "Cart is empty" });
+        }
+
+        // Prepare items for Midtrans
+        const orderItems = Object.keys(cartData).map((itemId) => {
+            const item = req.body.items.find((product) => product._id === itemId);
+            return {
+                ...item,
+                quantity: cartData[itemId],
+            };
+        });
+
         const newOrder = new orderModel({
             userId: req.body.userId,
-            items: req.body.items,
+            items: orderItems,
             amount: req.body.amount,
-            address:req.body.address
-        })
+            address: req.body.address,
+        });
+
         await newOrder.save();
-        await userModel.findByIdAndUpdate(req.body.userId,{cartData:{}})
-        //masih ada method yang belom di add seperti payment, belom setup api nya
 
-        const line_items = req.body.items.map(()=>({
-            price_data:{
-                currency: 'idr',
-                product_data:{
-                    name: item.name
-                },
-                unit_amount: item.price * 100*15000
+        const parameter = {
+            transaction_details: {
+                order_id: `${newOrder._id}-${Date.now()}`,
+                gross_amount: req.body.amount * 1000 * 5,
             },
-            quantity: item.quantity
-        }))
-
-        line_items.push({
-            price_data:{
-                currency: 'idr',
-                product_data:{
-                    name: 'ongkos kirim'
-                },
-                unit_amount: 2*100*15000
+            customer_details: {
+                first_name: req.body.address.firstName,
+                last_name: req.body.address.lastName,
+                email: req.body.address.email,
+                phone: req.body.address.phone,
             },
-            quantity: 1
-        })
+        };
 
-        const session = await stripe.checkout.session.create({
-            line_items:line_items,
-            mode: 'payment',
-            success_url: `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
-            cancel_url: `${frontend_url}/verify?success=false&orderId=${newOrder._id}`
-        })
+        const transaction = await snap.createTransaction(parameter);
+        console.log("Transaction Response:", transaction);
 
-        res.json({success:true,session_url:session.url})
- 
+        res.json({
+            success: true,
+            snapToken: transaction.token, // Include Snap Token for modal
+            session_url: transaction.redirect_url, // Include redirect URL for fallback
+        });
     } catch (error) {
-        console.log(error);
-        res.json({success:false,message:error.message})
-        
+        console.error("Error in placeOrder:", error);
+        res.json({ success: false, message: error.message });
     }
 }
 
-const verifyOrder = async (req,res) => {
-    const {orderId, success} = req.body;
+
+
+
+const verifyOrder = async (req, res) => {
+    const { orderId, success } = req.body;
+
     try {
-        if (success=="true") {
-            await orderModel.findByIdAndUpdate(orderId,{payment:true});
-            res.json({success:true,message:"Paid"})
-        }
-        else{
+        if (success === "true") {
+            // Mark the order as paid
+            await orderModel.findByIdAndUpdate(orderId, { payment: true });
+
+            // Clear the user's cart
+            const order = await orderModel.findById(orderId);
+            await userModel.findByIdAndUpdate(order.userId, { cartData: {} });
+
+            res.json({ success: true, message: "Payment confirmed. Cart cleared." });
+        } else {
+            // Payment failed, delete the order
             await orderModel.findByIdAndDelete(orderId);
-            res.json({success:false,message:"Not Paid"})
+            res.json({ success: false, message: "Payment not completed. Order canceled." });
         }
-        
     } catch (error) {
-        console.log(error);
-        res.json({success:false,message:error.message})
+        console.error("Error in verifyOrder:", error);
+        res.json({ success: false, message: error.message });
     }
 }
+
 
 //user orders for frontend
 const userOrders = async (req,res) => {
