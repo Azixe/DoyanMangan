@@ -16,28 +16,45 @@ const placeOrder = async (req, res) => {
             return res.json({ success: false, message: "Cart is empty" });
         }
 
-        // Prepare items for Midtrans
+        // Currency conversion rate
+        const USD_TO_IDR = 15000;
+        const DELIVERY_FEE_USD = 2;
+
+        // Prepare items for Midtrans and calculate total amount in IDR
+        let totalAmountUSD = 0;
         const orderItems = Object.keys(cartData).map((itemId) => {
             const item = req.body.items.find((product) => product._id === itemId);
+            const quantity = cartData[itemId];
+            totalAmountUSD += item.price * quantity; // Accumulate USD total
             return {
-                ...item,
-                quantity: cartData[itemId],
+                id: itemId,
+                price: item.price, // Price in USD
+                quantity,
+                name: item.name,
             };
         });
 
+        // Add delivery fee to total amount in USD
+        totalAmountUSD += DELIVERY_FEE_USD;
+
+        // Convert total amount to IDR
+        const grossAmountIDR = totalAmountUSD * USD_TO_IDR;
+
+        // Create a new order in your database
         const newOrder = new orderModel({
             userId: req.body.userId,
             items: orderItems,
-            amount: req.body.amount,
+            amount: totalAmountUSD, // Save in USD
             address: req.body.address,
         });
 
         await newOrder.save();
 
+        // Prepare Midtrans transaction parameters
         const parameter = {
             transaction_details: {
-                order_id: `${newOrder._id}-${Date.now()}`,
-                gross_amount: req.body.amount * 1000 * 5,
+                order_id: `${newOrder._id}-${Date.now()}`, // Unique order ID
+                gross_amount: Math.round(grossAmountIDR), // Total amount in IDR
             },
             customer_details: {
                 first_name: req.body.address.firstName,
@@ -45,11 +62,18 @@ const placeOrder = async (req, res) => {
                 email: req.body.address.email,
                 phone: req.body.address.phone,
             },
+            credit_card: {
+                secure: true, // Enable 3DS
+            },
         };
 
+        // Create transaction with Midtrans
         const transaction = await snap.createTransaction(parameter);
-        console.log("Transaction Response:", transaction);
 
+        console.log("Transaction Token:", transaction.token); // Debugging purposes
+        console.log("Transaction Redirect URL:", transaction.redirect_url); // Debugging purposes
+
+        // Send the transaction redirect URL to the frontend
         res.json({
             success: true,
             snapToken: transaction.token, // Include Snap Token for modal
@@ -59,7 +83,7 @@ const placeOrder = async (req, res) => {
         console.error("Error in placeOrder:", error);
         res.json({ success: false, message: error.message });
     }
-}
+};
 
 
 
