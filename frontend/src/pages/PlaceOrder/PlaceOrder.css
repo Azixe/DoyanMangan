@@ -1,41 +1,67 @@
+* {
+    box-sizing: border-box;
+    /*Untuk memastikan padding dan border tidak memengaruhi lebar input atau elemen lain*/
+}
+
 .place-order {
     display: flex;
+    /* Menggunakan flexbox untuk layout */
     align-items: start;
+    /* Menyusun elemen-elemen di dalamnya di posisi awal (atas) secara vertikal */
     justify-content: space-between;
+    /* Membuat jarak yang merata antara elemen di dalam kontainer */
     gap: 50px;
+    /* Memberikan jarak antar elemen di dalam flex container */
     margin-top: 100px;
+    /* Memberikan jarak dari atas kontainer */
 }
 
 .place-order-left {
     width: 100%;
+    /* Mengatur lebar elemen menjadi 100% dari kontainer induk */
     max-width: max(30%, 500px);
+    /* Membatasi lebar maksimum elemen, agar tidak lebih dari 500px, namun tetap 30% dari kontainer */
 }
 
 .place-order-left .title {
     font-size: 30px;
+    /* Mengatur ukuran font untuk judul */
     font-weight: 600;
+    /* Mengatur ketebalan font */
     margin-bottom: 50px;
+    /* Memberikan jarak bawah yang besar setelah judul */
 }
 
 .place-order-left input {
     margin-bottom: 15px;
+    /* Memberikan jarak bawah pada setiap input */
     width: 100%;
+    /* Input akan memenuhi seluruh lebar kontainer */
     padding: 10px;
+    /* Memberikan padding di dalam input untuk kenyamanan pengguna */
     border: 1px solid #c5c5c5;
+    /* Memberikan border abu-abu tipis pada input */
     border-radius: 4px;
+    /* Membuat sudut input menjadi melengkung */
     outline-color: green;
+    /* Mengubah warna outline saat input aktif (diklik) menjadi hijau */
 }
 
 .place-order-left .multi-fields {
     display: flex;
+    /* Menggunakan flexbox untuk tata letak form input agar sejajar */
     gap: 10px;
+    /* Memberikan jarak antara elemen input dalam satu baris */
 }
 
 .place-order-right {
     width: 100%;
+    /* Mengatur lebar elemen menjadi 100% dari kontainer induk */
     max-width: max(40%, 500px);
+    /* Membatasi lebar maksimum elemen agar tidak lebih dari 500px, namun tetap 40% dari kontainer */
 }
 
 .place-order .cart-total button {
     margin-top: 30px;
+    /* Memberikan jarak atas pada tombol agar tidak terlalu dekat dengan elemen sebelumnya */
 }
