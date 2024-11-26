@@ -11,7 +11,7 @@ const Footer = () => {
                     {/* Logo perusahaan */}
                     <img src={assets.logo} alt="Company Logo" />
                     {/* Deskripsi singkat */}
-                    <p>Lorem Ipsum is simply dummy text of the printing</p>
+                    <p>tes</p>
                     {/* Ikon media sosial */}
                     <div className="footer-social-icons">
                         <img src={assets.facebook_icon} alt="Facebook" />
