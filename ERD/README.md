@@ -34,12 +34,9 @@
 ---
 
 ## **Kekurangan pada Model Data**
-1. **Foreign Key Eksplisit**:  
+**Foreign Key Eksplisit**:  
    - MongoDB tidak secara langsung menegakkan hubungan antar-koleksi seperti SQL. Namun, field `id` dalam `orders.items` dan `userId` dalam `orders` menunjukkan referensi implisit ke koleksi lain.
-   
-2. **Saran Peningkatan**:
-   - Gunakan field `_id` unik pada koleksi `foods` dan `users`, lalu gunakan referensi eksplisit di koleksi `orders` melalui `ObjectId`.
-   - Tambahkan indeks pada referensi tersebut untuk meningkatkan efisiensi query.
+  
 
 ---
 
