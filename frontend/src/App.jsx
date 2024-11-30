@@ -17,6 +17,7 @@ import Verify from './pages/Verify/Verify';
 // Mengimpor halaman untuk verifikasi pengguna
 import MyOrders from './pages/MyOrders/MyOrders';
 // Mengimpor halaman untuk melihat riwayat pesanan
+import ResetPassword from './pages/ResetPassword/ResetPassword';
 
 const App = () => {
 
@@ -44,6 +45,7 @@ const App = () => {
           {/* Rute untuk halaman verifikasi */}
           <Route path='/myorders' element={<MyOrders />} />
           {/* Rute untuk halaman riwayat pesanan */}
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
 
