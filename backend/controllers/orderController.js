@@ -20,19 +20,31 @@ const placeOrder = async (req, res) => {
         const USD_TO_IDR = 15000;
         const DELIVERY_FEE_USD = 2;
 
-        // Prepare items for Midtrans and calculate total amount in IDR
+        // Prepare items for Midtrans and calculate total amount in USD
         let totalAmountUSD = 0;
         const orderItems = Object.keys(cartData).map((itemId) => {
             const item = req.body.items.find((product) => product._id === itemId);
+
+            // Ensure item is found
+            if (!item) {
+                console.error(`Item not found for itemId: ${itemId}`);
+                return null; // Return null if item is not found
+            }
+
             const quantity = cartData[itemId];
-            totalAmountUSD += item.price * quantity; // Accumulate USD total
+            totalAmountUSD += item.price * quantity;
+
             return {
                 id: itemId,
-                price: item.price, // Price in USD
+                price: item.price,
                 quantity,
                 name: item.name,
             };
-        });
+        }).filter(item => item !== null); // Filter out undefined/null items
+
+        if (orderItems.length === 0) {
+            return res.json({ success: false, message: "No valid items in the cart" });
+        }
 
         // Add delivery fee to total amount in USD
         totalAmountUSD += DELIVERY_FEE_USD;
