@@ -63,10 +63,6 @@
     margin-top: -15px;
 }
 
-.login-popup-condition input {
-    margin-top: 5px;
-}
-
 .login-popup p span {
     color: green;
     font-weight: 500;
@@ -75,4 +71,5 @@
 
 .forgot-password {
     cursor: pointer;
+    color: rgb(53, 53, 53)
 }

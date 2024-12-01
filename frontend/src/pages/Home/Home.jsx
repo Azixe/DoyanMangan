@@ -3,7 +3,6 @@ import './home.css' // Mengimpor file CSS untuk styling komponen Home
 import Header from '../../componnents/Header/Header' // Mengimpor komponen Header
 import ExploreMenu from '../../componnents/ExploreMenu/ExploreMenu' // Mengimpor komponen untuk menu eksplorasi
 import FoodDisplay from '../../componnents/FoodDisplay/FoodDisplay' // Mengimpor komponen untuk menampilkan makanan
-import AppDownload from '../../componnents/AppDownload/AppDownload' // Mengimpor komponen untuk unduhan aplikasi
 
 const Home = () => {
     // State untuk mengelola kategori yang dipilih pada menu eksplorasi
@@ -19,9 +18,6 @@ const Home = () => {
 
             {/* Komponen untuk menampilkan makanan berdasarkan kategori yang dipilih */}
             <FoodDisplay category={category} />
-
-            {/* Komponen untuk menampilkan bagian unduhan aplikasi */}
-            <AppDownload />
         </div>
     )
 }

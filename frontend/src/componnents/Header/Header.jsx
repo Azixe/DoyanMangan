@@ -9,8 +9,6 @@ const Header = () => {
                 {/* Teks utama sebagai judul */}
                 <p>Pilihlah dari beragam menu yang menyajikan beragam hidangan lezat</p>
                 {/* Teks deskripsi tambahan */}
-                <button>View Menu</button>
-                {/* Tombol untuk melihat menu (aksi yang bisa dihubungkan dengan navigasi) */}
             </div>
         </div>
     );

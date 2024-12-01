@@ -18,15 +18,15 @@ const FoodDisplay = ({ category }) => {
 
     return (
         <div className='food-display' id='food-display'>
-            <h2>Makanan favorit untuk kamu</h2>
+            <h2>Cari Makanan favorit kamu</h2>
 
             {/* Input pencarian */}
             <input
+                className="search-bar"
                 type="text"
                 placeholder="Cari makanan..."
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                className="search-bar"
             />
 
             {/* Menampilkan daftar makanan yang telah difilter */}
