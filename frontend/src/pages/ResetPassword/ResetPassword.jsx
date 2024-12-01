@@ -5,21 +5,26 @@ import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
     const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleResetPassword = async (event) => {
         event.preventDefault();
+        setLoading(true);
+
         try {
-            const response = await axios.post('https://your-api-url/api/user/reset-password', { email });
+            const response = await axios.post('http://localhost:4000/api/user/reset-password', { email });
             if (response.data.success) {
-                setMessage('Email untuk reset password telah dikirim!');
-                setTimeout(() => navigate('/'), 3000); // Redirect ke halaman utama setelah 3 detik
+                setMessage('A password reset link has been sent to your email!');
+                setTimeout(() => navigate('/'), 3000);
             } else {
                 setMessage(response.data.message);
             }
         } catch (error) {
-            setMessage('Terjadi kesalahan, silakan coba lagi.');
+            setMessage('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -29,12 +34,14 @@ const ResetPassword = () => {
                 <h2>Reset Password</h2>
                 <input
                     type="email"
-                    placeholder="Masukkan email Anda"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-                <button type="submit">Kirim Email Reset</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Sending...' : 'Send Reset Email'}
+                </button>
                 {message && <p className="reset-password-message">{message}</p>}
             </form>
         </div>
