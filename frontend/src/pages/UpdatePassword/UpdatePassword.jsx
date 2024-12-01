@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import './UpdatePassword.css';
 import axios from 'axios';
 
 const UpdatePassword = () => {
