@@ -1,41 +1,91 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import './UpdatePassword.css';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { assets } from "../../assets/assets";
+import "./UpdatePassword.css";
+import axios from "axios";
 
 const UpdatePassword = () => {
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
-    const [searchParams] = useSearchParams(); // Extract URL parameters
-    const token = searchParams.get('token'); // Get 'token' from URL
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token"); // Extract the reset token from the URL
+  const navigate = useNavigate(); // Hook for navigation
 
-    const handleUpdatePassword = async (e) => {
-        e.preventDefault();
+  const validatePassword = () => {
+    if (password !== confirmPassword) {
+      setMessage("Passwords don't match");
+      return false;
+    }
+    setMessage("");
+    return true;
+  };
 
-        try {
-            const response = await axios.post('http://localhost:4000/api/user/update-password', { token, password });
-            setMessage(response.data.message); // Show success or error message
-        } catch (error) {
-            setMessage('Error updating password');
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    return (
-        <div className="update-password">
-            <form onSubmit={handleUpdatePassword} className="update-password-container">
-                <h2>Update Password</h2>
-                <input
-                    type="password"
-                    placeholder="Enter your new password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Update Password</button>
-                {message && <p>{message}</p>}
-            </form>
-        </div>
-    );
+    if (!validatePassword()) return;
+
+    try {
+      const response = await axios.post("http://localhost:4000/api/user/update-password", { token, password });
+      if (response.data.success) {
+        setMessage("Password updated successfully!");
+        setTimeout(() => navigate("/"), 2000); // Redirect to home after 2 seconds
+      } else {
+        setMessage(response.data.message);
+      }
+    } catch (error) {
+      setMessage("Error updating password. Please try again.");
+    }
+  };
+
+  return (
+    <div className="mainDiv">
+      <div className="cardStyle">
+        <form id="signupForm" onSubmit={handleSubmit}>
+          <img src={assets.logo} id="signupLogo" alt="Logo" />
+          <h2 className="formTitle">Reset Your Password</h2>
+
+          <div className="inputDiv">
+            <label className="inputLabel" htmlFor="password">
+              New Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="inputDiv">
+            <label className="inputLabel" htmlFor="confirmPassword">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyUp={validatePassword}
+              required
+            />
+          </div>
+
+          <div className="buttonWrapper">
+            <button type="submit" id="submitButton" className="submitButton">
+              <span>Continue</span>
+            </button>
+          </div>
+
+          {message && <p style={{ textAlign: "center", color: "red" }}>{message}</p>}
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default UpdatePassword;
