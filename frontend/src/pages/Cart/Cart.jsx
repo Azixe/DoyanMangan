@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 // Mengimpor `useNavigate` dari React Router untuk melakukan navigasi ke halaman checkout
 
 const Cart = () => {
-
   // Mengakses nilai dan fungsi dari StoreContext menggunakan useContext
   const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } = useContext(StoreContext);
 
   // Menggunakan hook `useNavigate` untuk navigasi ke halaman lainnya
   const navigate = useNavigate();
+
+  // Biaya pengiriman (Rp 15.000)
+  const deliveryFee = 15000;
 
   return (
     <div className='cart'>
@@ -48,8 +50,9 @@ const Cart = () => {
                 </div>
                 <hr />
               </div>
-            )
+            );
           }
+          return null;
         })}
       </div>
 
@@ -66,13 +69,13 @@ const Cart = () => {
             <div className="cart-total-details">
               <p>Delivery Fee</p>
               {/* Jika keranjang kosong, biaya pengiriman 0 */}
-              <p>Rp{getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>Rp{getTotalCartAmount() === 0 ? 0 : deliveryFee}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
               {/* Total akhir setelah ditambah biaya pengiriman */}
-              <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
+              <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + deliveryFee}</b>
             </div>
           </div>
           {/* Tombol untuk melanjutkan ke halaman checkout */}
@@ -91,7 +94,7 @@ const Cart = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Cart;
