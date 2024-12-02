@@ -9,6 +9,9 @@ const PlaceOrder = () => {
   // Mengambil data dari StoreContext, seperti total harga cart, token autentikasi, food list, cart items, dan URL.
   const { getTotalCartAmount, token, food_list, cartItems, url } = useContext(StoreContext);
 
+  // Variabel untuk biaya pengiriman
+  const deliveryFee = 15000;
+
   // State untuk menyimpan data inputan pengguna.
   const [data, setData] = useState({
     firstName: "",
@@ -44,7 +47,7 @@ const PlaceOrder = () => {
     let orderData = {
       address: data, // Alamat pengiriman yang diinput oleh pengguna.
       items: orderItems, // Daftar item yang dipesan.
-      amount: getTotalCartAmount() + 2, // Total harga pemesanan (termasuk biaya pengiriman).
+      amount: getTotalCartAmount() + deliveryFee, // Total harga pemesanan (termasuk biaya pengiriman).
     };
 
     try {
@@ -92,7 +95,7 @@ const PlaceOrder = () => {
     } else if (getTotalCartAmount() === 0) {
       navigate('/cart'); // Mengarahkan pengguna ke cart jika jumlah total pemesanan 0.
     }
-  }, [token]); // Menjalankan efek ini setiap kali token berubah.
+  }, [token, getTotalCartAmount, navigate]); // Menjalankan efek ini setiap kali token berubah.
 
   return (
     // Form untuk mengumpulkan informasi pengiriman dan menampilkan total cart.
@@ -100,114 +103,98 @@ const PlaceOrder = () => {
       <div className="place-order-left">
         <p className="title">Delivery Information</p> {/* Judul untuk bagian informasi pengiriman */}
         <div className="multi-fields">
-          {/* Input untuk nama depan (first name) */}
           <input
             required
-            name="firstName" // Nama field untuk menangani state
-            onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-            value={data.firstName} // Nilai input yang dikontrol dari state
+            name="firstName"
+            onChange={onChangeHandler}
+            value={data.firstName}
             type="text"
-            placeholder="First name" // Placeholder teks untuk input
+            placeholder="First name"
           />
-          {/* Input untuk nama belakang (last name) */}
           <input
             required
-            name="lastName" // Nama field untuk menangani state
-            onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-            value={data.lastName} // Nilai input yang dikontrol dari state
+            name="lastName"
+            onChange={onChangeHandler}
+            value={data.lastName}
             type="text"
-            placeholder="Last name" // Placeholder teks untuk input
+            placeholder="Last name"
           />
         </div>
-
-        {/* Input untuk email */}
         <input
           required
-          name="email" // Nama field untuk menangani state
-          onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-          value={data.email} // Nilai input yang dikontrol dari state
-          type="email" // Tipe input email untuk validasi otomatis
-          placeholder="Email address" // Placeholder teks untuk input
+          name="email"
+          onChange={onChangeHandler}
+          value={data.email}
+          type="email"
+          placeholder="Email address"
         />
-
-        {/* Input untuk alamat jalan (street) */}
         <input
           required
-          name="street" // Nama field untuk menangani state
-          onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-          value={data.street} // Nilai input yang dikontrol dari state
+          name="street"
+          onChange={onChangeHandler}
+          value={data.street}
           type="text"
-          placeholder="Street" // Placeholder teks untuk input
+          placeholder="Street"
         />
-
-        {/* Input untuk kota dan negara bagian */}
-        <div className="multi-fields">
-          {/* Input untuk kota (city) */}
-          <input
-            required
-            name="city" // Nama field untuk menangani state
-            onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-            value={data.city} // Nilai input yang dikontrol dari state
-            type="text"
-            placeholder="City" // Placeholder teks untuk input
-          />
-          {/* Input untuk negara bagian (state) */}
-          <input
-            required
-            name="state" // Nama field untuk menangani state
-            onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-            value={data.state} // Nilai input yang dikontrol dari state
-            type="text"
-            placeholder="State" // Placeholder teks untuk input
-          />
-        </div>
-
-        {/* Input untuk negara (country) */}
         <div className="multi-fields">
           <input
             required
-            name="country" // Nama field untuk menangani state
-            onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-            value={data.country} // Nilai input yang dikontrol dari state
+            name="city"
+            onChange={onChangeHandler}
+            value={data.city}
             type="text"
-            placeholder="Country" // Placeholder teks untuk input
+            placeholder="City"
+          />
+          <input
+            required
+            name="state"
+            onChange={onChangeHandler}
+            value={data.state}
+            type="text"
+            placeholder="State"
           />
         </div>
-
-        {/* Input untuk nomor telepon */}
         <input
           required
-          name="phone" // Nama field untuk menangani state
-          onChange={onChangeHandler} // Fungsi yang menangani perubahan input
-          value={data.phone} // Nilai input yang dikontrol dari state
+          name="country"
+          onChange={onChangeHandler}
+          value={data.country}
           type="text"
-          placeholder="Phone" // Placeholder teks untuk input
+          placeholder="Country"
+        />
+        <input
+          required
+          name="phone"
+          onChange={onChangeHandler}
+          value={data.phone}
+          type="text"
+          placeholder="Phone"
         />
       </div>
       <div className="place-order-right">
         <div className="cart-total">
-          <h2>Cart Totals</h2> {/* Judul untuk bagian total cart */}
+          <h2>Cart Totals</h2>
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>Rp{getTotalCartAmount()}</p> {/* Menampilkan subtotal berdasarkan total cart */}
+              <p>Rp{getTotalCartAmount()}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>Rp{getTotalCartAmount() === 0 ? 0 : 2}</p> {/* Menampilkan biaya pengiriman, jika total cart 0 maka biaya pengiriman 0 */}
+              <p>Rp{getTotalCartAmount() === 0 ? 0 : deliveryFee}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b> {/* Total akhir termasuk biaya pengiriman */}
+              <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + deliveryFee}</b>
             </div>
           </div>
-          <button type="submit">PROCEED TO PAYMENT</button> {/* Tombol untuk melanjutkan ke proses pembayaran */}
+          <button type="submit">PROCEED TO PAYMENT</button>
         </div>
       </div>
     </form>
   );
 };
 
-export default PlaceOrder; // Menyelesaikan ekspor komponen PlaceOrder.
+export default PlaceOrder;
