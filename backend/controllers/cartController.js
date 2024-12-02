@@ -1,110 +1,53 @@
-import userModel from "../models/userModel.js";
-import foodModel from "../models/foodModel.js";
-import mongoose from "mongoose";
+import userModel from "../models/userModel.js"
 
-// Helper function: Validate ObjectId
-const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
-
-// Add item to cart
+// add items to user cart
 const addToCart = async (req, res) => {
     try {
-        // Validate userId and itemId
-        const { userId, itemId } = req.body;
-        if (!isValidObjectId(userId) || !isValidObjectId(itemId)) {
-            return res.status(400).json({ success: false, message: "Invalid userId or itemId" });
+        let userData = await userModel.findOne({_id:req.body.userId});
+        let cartData = await userData.cartData;
+        if(!cartData[req.body.itemId])
+        {
+            cartData[req.body.itemId] = 1;
         }
-
-        // Find user and validate existence
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
+        else{
+            cartData[req.body.itemId] += 1;
         }
-
-        // Find item and validate existence
-        const item = await foodModel.findById(itemId);
-        if (!item) {
-            return res.status(404).json({ success: false, message: "Item not found" });
-        }
-
-        // Update user's cart atomically
-        const updatedCart = { ...user.cartData };
-        if (updatedCart[itemId]) {
-            updatedCart[itemId] += 1; // Increment quantity if already in cart
-        } else {
-            updatedCart[itemId] = 1; // Add new item to cart
-        }
-
-        user.cartData = updatedCart;
-        await user.save();
-
-        res.status(200).json({ success: true, message: "Item added to cart", cartData: updatedCart });
+        await userModel.findByIdAndUpdate(req.body.userId,{cartData});
+        res.json({success:true,message:"Added to Cart"});
     } catch (error) {
-        console.error("Error in addToCart:", error);
-        res.status(500).json({ success: false, message: "Internal server error" });
+        console.log(error);
+        res.json({success:false,message:"Error"})
     }
-};
+}
 
-// Remove item from cart
+
+// remove items from user cart
 const removeFromCart = async (req, res) => {
     try {
-        const { userId, itemId } = req.body;
-
-        // Validate userId and itemId
-        if (!isValidObjectId(userId) || !isValidObjectId(itemId)) {
-            return res.status(400).json({ success: false, message: "Invalid userId or itemId" });
+        let userData = await userModel.findById(req.body.userId)
+        let cartData = await userData.cartData;
+        if(cartData[req.body.itemId] > 0){
+            cartData[req.body.itemId] -= 1
         }
-
-        // Find user
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
-        }
-
-        // Check if item exists in the user's cart
-        const cart = user.cartData || {};
-        if (!cart[itemId]) {
-            return res.status(404).json({ success: false, message: "Item not found in cart" });
-        }
-
-        // Update cart atomically
-        cart[itemId] -= 1;
-        if (cart[itemId] <= 0) {
-            delete cart[itemId]; // Remove item when quantity reaches 0
-        }
-
-        user.cartData = cart;
-        await user.save();
-
-        res.status(200).json({ success: true, message: "Item removed from cart", cartData: cart });
+        await userModel.findByIdAndUpdate(req.body.userId,{cartData});
+        res.json({success:true,message:"Removed from Cart"});
     } catch (error) {
-        console.error("Error in removeFromCart:", error);
-        res.status(500).json({ success: false, message: "Internal server error" });
+        console.log(error);
+        res.json({success:false,message:"Error"})
+        
     }
-};
+}   
 
-// Get cart data for a user
-const getCart = async (req, res) => {
+// fetch user cart data  
+const getCart = async (req, res) => {  
     try {
-        const { userId } = req.body;
-
-        // Validate userId
-        if (!isValidObjectId(userId)) {
-            return res.status(400).json({ success: false, message: "Invalid userId" });
-        }
-
-        // Find user
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
-        }
-
-        // Return cart data
-        const cart = user.cartData || {};
-        res.status(200).json({ success: true, cartData: cart });
+        let userData = await userModel.findById(req.body.userId);
+        let cartData = await userData.cartData;
+        res.json({success:true,cartData})
     } catch (error) {
-        console.error("Error in getCart:", error);
-        res.status(500).json({ success: false, message: "Internal server error" });
+        console.log(error);
+        res.json({success:false,message:"Error"})
     }
-};
+}
 
-export { addToCart, removeFromCart, getCart };
+export {addToCart, removeFromCart, getCart}
