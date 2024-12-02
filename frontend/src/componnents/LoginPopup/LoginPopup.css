@@ -58,12 +58,12 @@
 
 .login-popup-condition {
     display: flex;
-    align-items: start;
+    align-items: center;
     gap: 8px;
     margin-top: -15px;
 }
 
-.login-popup p span {
+.lo .login-popup p span {
     color: green;
     font-weight: 500;
     cursor: pointer;
