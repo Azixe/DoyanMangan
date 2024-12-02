@@ -42,6 +42,17 @@
     color: #454545;
 }
 
+/* Style for Payment Status */
+.paid-status {
+    color: green; /* Green for PAID */
+    font-weight: bold;
+}
+
+.pending-status {
+    color: yellow; /* Yellow for PENDING */
+    font-weight: bold;
+}
+
 @media(max-width:900px) {
     .my-orders-order {
         grid-template-columns: 1fr 2fr 1fr;

@@ -61,10 +61,14 @@ const MyOrders = () => {
                             <p>Rp{order.amount.toFixed(2)}</p>
                             {/* Menampilkan jumlah item dalam pesanan */}
                             <p>Items: {order.items ? order.items.length : 0}</p>
-                            {/* Menampilkan status pesanan */}
+                            {/* Menampilkan status pesanan dan payment status */}
                             <p>
                                 <span>&#x25cf;</span>
-                                <b>{order.status || "Unknown"}</b> {/* Fallback jika status tidak ditemukan */}
+                                <b>{order.status || "Unknown"}</b>
+                                &nbsp;|&nbsp;
+                                <b className={order.payment ? "paid-status" : "pending-status"}>
+                                    {order.payment ? "PAID" : "PAYMENT PENDING"}
+                                </b> {/* Conditional classes for PAID/PENDING */}
                             </p>
                             {/* Tombol untuk melacak pesanan */}
                             <button onClick={fetchOrders}>Track Order</button>
