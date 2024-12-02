@@ -190,17 +190,17 @@ const PlaceOrder = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p> {/* Menampilkan subtotal berdasarkan total cart */}
+              <p>Rp{getTotalCartAmount()}</p> {/* Menampilkan subtotal berdasarkan total cart */}
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${getTotalCartAmount() === 0 ? 0 : 2}</p> {/* Menampilkan biaya pengiriman, jika total cart 0 maka biaya pengiriman 0 */}
+              <p>Rp{getTotalCartAmount() === 0 ? 0 : 2}</p> {/* Menampilkan biaya pengiriman, jika total cart 0 maka biaya pengiriman 0 */}
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b> {/* Total akhir termasuk biaya pengiriman */}
+              <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b> {/* Total akhir termasuk biaya pengiriman */}
             </div>
           </div>
           <button type="submit">PROCEED TO PAYMENT</button> {/* Tombol untuk melanjutkan ke proses pembayaran */}

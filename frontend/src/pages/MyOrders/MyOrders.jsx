@@ -58,7 +58,7 @@ const MyOrders = () => {
                                 )}
                             </p>
                             {/* Menampilkan total harga pesanan */}
-                            <p>${order.amount.toFixed(2)}</p>
+                            <p>Rp{order.amount.toFixed(2)}</p>
                             {/* Menampilkan jumlah item dalam pesanan */}
                             <p>Items: {order.items ? order.items.length : 0}</p>
                             {/* Menampilkan status pesanan */}

@@ -38,11 +38,11 @@ const Cart = () => {
                   {/* Menampilkan gambar item makanan */}
                   <img src={url + "/images/" + item.image} alt="" />
                   <p>{item.name}</p>
-                  <p>${item.price}</p>
+                  <p>Rp{item.price}</p>
                   {/* Menampilkan jumlah item yang ada di keranjang */}
                   <p>{cartItems[item._id]}</p>
                   {/* Menampilkan total harga item dalam keranjang */}
-                  <p>${item.price * cartItems[item._id]}</p>
+                  <p>Rp{item.price * cartItems[item._id]}</p>
                   {/* Tombol untuk menghapus item dari keranjang */}
                   <p onClick={() => removeFromCart(item._id)} className='cross'>x</p>
                 </div>
@@ -60,19 +60,19 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
+              <p>Rp{getTotalCartAmount()}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
               {/* Jika keranjang kosong, biaya pengiriman 0 */}
-              <p>${getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>Rp{getTotalCartAmount() === 0 ? 0 : 2}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
               {/* Total akhir setelah ditambah biaya pengiriman */}
-              <b>${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
+              <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
             </div>
           </div>
           {/* Tombol untuk melanjutkan ke halaman checkout */}
