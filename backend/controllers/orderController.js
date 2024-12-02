@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';  
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import midtransClient from "midtrans-client";
@@ -147,4 +148,40 @@ const updateStatus = async (req, res) => {
     }
 };
 
-export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus };
+const updatePaymentStatus = async (req, res) => {
+    const { orderId, paymentStatus } = req.body;
+
+    try {
+        // Log the incoming orderId and paymentStatus
+        console.log("Received orderId:", orderId, "paymentStatus:", paymentStatus);
+
+        // Ensure paymentStatus is a boolean
+        if (typeof paymentStatus !== "boolean") {
+            return res.status(400).json({ success: false, message: "Invalid payment status (should be boolean)" });
+        }
+
+        // Convert orderId to ObjectId (in case it's passed as a string)
+        const objectId = new mongoose.Types.ObjectId(orderId);  // Use `new` keyword here
+
+        // Log the converted objectId
+        console.log("Converted ObjectId:", objectId);
+
+        // Update the payment field in the database
+        const updatedOrder = await orderModel.findByIdAndUpdate(
+            objectId,
+            { payment: paymentStatus },  // Directly update with the boolean value
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        res.json({ success: true, message: "Payment status updated successfully", updatedOrder });
+    } catch (error) {
+        console.error("Error updating payment status:", error);  // Log the error to console for debugging
+        res.status(500).json({ success: false, message: "Error updating payment status", error: error.message });
+    }
+};
+
+export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus, updatePaymentStatus };

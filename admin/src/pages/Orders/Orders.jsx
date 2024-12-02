@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import './Orders.css'
+import React, { useEffect, useState } from 'react';
+import './Orders.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { assets } from '../../assets/assets';
 
 const Orders = ({ url }) => {
-
   const [orders, setOrders] = useState([]);
 
   const fetchAllOrders = async () => {
@@ -21,7 +20,7 @@ const Orders = ({ url }) => {
       console.error("Error fetching orders:", error);
       toast.error("Error fetching orders");
     }
-  }
+  };
 
   const statusHandler = async (event, orderId) => {
     try {
@@ -36,7 +35,32 @@ const Orders = ({ url }) => {
       console.error("Error updating order status:", error);
       toast.error("Error updating order status");
     }
-  }
+  };
+
+  const paymentStatusHandler = async (event, orderId) => {
+    const paymentStatus = event.target.value === "true";  // Ensure that the value is a boolean
+  
+    console.log("Updating payment status to:", paymentStatus, "for order:", orderId);
+
+    try {
+        const response = await axios.post(url + "/api/order/payment-status", {
+            orderId,
+            paymentStatus,  // Send the boolean value directly
+        });
+
+        console.log("Response from server:", response.data); // Ensure this shows in logs
+
+        if (response.data.success) {
+            fetchAllOrders(); // Refresh orders after updating payment status
+        } else {
+            toast.error("Failed to update payment status: " + response.data.message); // Show error message
+        }
+    } catch (error) {
+        console.error("Error updating payment status:", error);  // More detailed logging
+        toast.error("Error updating payment status.");
+    }
+};
+
 
   useEffect(() => {
     fetchAllOrders();
@@ -47,7 +71,7 @@ const Orders = ({ url }) => {
       <h3>Order Page</h3>
       <div className="order-list">
         {orders.length === 0 ? (
-          <p>No orders found</p> // Display a message if no orders are available
+          <p>No orders found</p>
         ) : (
           orders.map((order, index) => (
             <div key={index} className='order-item'>
@@ -62,7 +86,7 @@ const Orders = ({ url }) => {
                       </span>
                     ))
                   ) : (
-                    <span>No items found</span> // Fallback if no items in order
+                    <span>No items found</span>
                   )}
                 </p>
                 <p className='order-item-name'>{order.address.firstName} {order.address.lastName}</p>
@@ -75,11 +99,25 @@ const Orders = ({ url }) => {
               </div>
               <p>Items: {order.items ? order.items.length : 0}</p>
               <p>Rp{order.amount}</p>
-              <select onChange={(event) => statusHandler(event, order._id)} value={order.status}>
-                <option value="Food Processing">Food Processing</option>
-                <option value="Out for delivery">Out for delivery</option>
-                <option value="Delivered">Delivered</option>
-              </select>
+
+              {/* Container for both dropdowns */}
+              <div className="order-status-payment">
+                {/* Status Dropdown */}
+                <select onChange={(event) => statusHandler(event, order._id)} value={order.status}>
+                  <option value="Food Processing">Food Processing</option>
+                  <option value="Out for delivery">Out for delivery</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
+
+                {/* Payment Status Dropdown */}
+                <select
+                  onChange={(event) => paymentStatusHandler(event, order._id)}
+                  value={order.payment ? true : false}  // Use booleans directly
+                >
+                  <option value={false}>UNPAID</option>
+                  <option value={true}>PAID</option>
+                </select>
+              </div>
             </div>
           ))
         )}
