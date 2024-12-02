@@ -16,12 +16,11 @@ const placeOrder = async (req, res) => {
             return res.json({ success: false, message: "Cart is empty" });
         }
 
-        // Currency conversion rate
-        const USD_TO_IDR = 15000;
-        const DELIVERY_FEE_USD = 2;
+        // Define delivery fee in IDR directly (previously USD)
+        const DELIVERY_FEE_IDR = 15000; // IDR instead of USD
 
-        // Prepare items for Midtrans and calculate total amount in USD
-        let totalAmountUSD = 0;
+        // Prepare items for Midtrans and calculate total amount in IDR
+        let totalAmountIDR = 0;
         const orderItems = Object.keys(cartData).map((itemId) => {
             const item = req.body.items.find((product) => product._id === itemId);
 
@@ -32,7 +31,7 @@ const placeOrder = async (req, res) => {
             }
 
             const quantity = cartData[itemId];
-            totalAmountUSD += item.price * quantity;
+            totalAmountIDR += item.price * quantity; // Add item price in IDR
 
             return {
                 id: itemId,
@@ -46,27 +45,24 @@ const placeOrder = async (req, res) => {
             return res.json({ success: false, message: "No valid items in the cart" });
         }
 
-        // Add delivery fee to total amount in USD
-        totalAmountUSD += DELIVERY_FEE_USD;
+        // Add delivery fee to total amount in IDR
+        totalAmountIDR += DELIVERY_FEE_IDR;
 
-        // Convert total amount to IDR
-        const grossAmountIDR = totalAmountUSD * USD_TO_IDR;
-
-        // Create a new order in your database
+        // Create a new order in your database (amount in IDR now)
         const newOrder = new orderModel({
             userId: req.body.userId,
             items: orderItems,
-            amount: totalAmountUSD, // Save in USD
+            amount: totalAmountIDR, // Save total in IDR
             address: req.body.address,
         });
 
         await newOrder.save();
 
-        // Prepare Midtrans transaction parameters
+        // Prepare Midtrans transaction parameters (amount in IDR)
         const parameter = {
             transaction_details: {
                 order_id: `${newOrder._id}-${Date.now()}`, // Unique order ID
-                gross_amount: Math.round(grossAmountIDR), // Total amount in IDR
+                gross_amount: totalAmountIDR, // Total amount in IDR
             },
             customer_details: {
                 first_name: req.body.address.firstName,
@@ -97,9 +93,6 @@ const placeOrder = async (req, res) => {
     }
 };
 
-
-
-
 const verifyOrder = async (req, res) => {
     const { orderId, success } = req.body;
 
@@ -122,43 +115,36 @@ const verifyOrder = async (req, res) => {
         console.error("Error in verifyOrder:", error);
         res.json({ success: false, message: error.message });
     }
-}
+};
 
-
-//user orders for frontend
-const userOrders = async (req,res) => {
+const userOrders = async (req, res) => {
     try {
-        const orders = await orderModel.find({userId:req.body.userId})
-        res.json({success:true,data:orders})
-        
+        const orders = await orderModel.find({ userId: req.body.userId });
+        res.json({ success: true, data: orders });
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:error.message})
-        
+        res.json({ success: false, message: error.message });
     }
-}
+};
 
-//listing order buat admin panel
-const listOrders = async (req,res) => {
+const listOrders = async (req, res) => {
     try {
         const orders = await orderModel.find({});
-        res.json({success:true,data:orders})
+        res.json({ success: true, data: orders });
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:error.message})
+        res.json({ success: false, message: error.message });
     }
-}
+};
 
-//API buat update order status
-const updateStatus = async (req,res) => {
+const updateStatus = async (req, res) => {
     try {
-        await orderModel.findByIdAndUpdate(req.body.orderId,{status:req.body.status});
-        res.json({success:true,message:"Status updated"})
+        await orderModel.findByIdAndUpdate(req.body.orderId, { status: req.body.status });
+        res.json({ success: true, message: "Status updated" });
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:error.message})
+        res.json({ success: false, message: error.message });
     }
-}
+};
 
-
-export {placeOrder, verifyOrder, userOrders, listOrders, updateStatus}
+export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus };
