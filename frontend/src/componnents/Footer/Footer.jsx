@@ -11,12 +11,11 @@ const Footer = () => {
                     {/* Logo perusahaan */}
                     <img src={assets.logo} alt="Company Logo" />
                     {/* Deskripsi singkat */}
-                    <p>tes</p>
+                    <p>DoyanMangan hadir untuk memenuhi kebutuhan kuliner Anda. Kami menyediakan berbagai pilihan makanan lezat dengan layanan cepat dan berkualitas. Temukan kebahagiaan dalam setiap santapan bersama kami</p>
                     {/* Ikon media sosial */}
                     <div className="footer-social-icons">
                         <img src={assets.facebook_icon} alt="Facebook" />
                         <img src={assets.twitter_icon} alt="Twitter" />
-                        <img src={assets.linkedin_icon} alt="LinkedIn" />
                     </div>
                 </div>
 
@@ -38,7 +37,7 @@ const Footer = () => {
                     <ul>
                         {/* Kontak perusahaan */}
                         <li>0895377128083</li>
-                        <li>contact@gmail.com</li>
+                        <li>doyanmangan.foods@gmail.com</li>
                     </ul>
                 </div>
             </div>

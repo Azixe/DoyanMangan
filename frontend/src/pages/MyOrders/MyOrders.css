@@ -44,12 +44,14 @@
 
 /* Style for Payment Status */
 .paid-status {
-    color: green; /* Green for PAID */
+    color: green;
+    /* Green for PAID */
     font-weight: bold;
 }
 
 .pending-status {
-    color: yellow; /* Yellow for PENDING */
+    color: yellow;
+    /* Yellow for PENDING */
     font-weight: bold;
 }
 

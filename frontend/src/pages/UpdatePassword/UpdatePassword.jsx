@@ -27,7 +27,7 @@ const UpdatePassword = () => {
     if (!validatePassword()) return;
 
     try {
-      const response = await axios.post("http://localhost:4000/api/user/update-password", { token, password });
+      const response = await axios.post("https://doyanmangan.web.id/api/user/update-password", { token, password });
       if (response.data.success) {
         setMessage("Password updated successfully!");
         setTimeout(() => navigate("/"), 2000); // Redirect to home after 2 seconds

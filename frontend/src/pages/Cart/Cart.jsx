@@ -22,11 +22,11 @@ const Cart = () => {
       <div className="cart-item">
         <div className="cart-items-title">
           <p>Items</p>
-          <p>Title</p>
-          <p>Price</p>
-          <p>Quantity</p>
+          <p>Nama</p>
+          <p>Harga</p>
+          <p>Jumlah</p>
           <p>Total</p>
-          <p>Remove</p>
+          <p>Hapus</p>
         </div>
         <br />
         <hr />
@@ -59,21 +59,21 @@ const Cart = () => {
       {/* Menampilkan total biaya dan checkout */}
       <div className="cart-bottom">
         <div className="cart-total">
-          <h2>Cart Totals</h2>
+          <h2>Total Keranjang</h2>
           <div>
             <div className="cart-total-details">
-              <p>Subtotal</p>
+              <p>Harga</p>
               <p>Rp{getTotalCartAmount()}</p>
             </div>
             <hr />
             <div className="cart-total-details">
-              <p>Delivery Fee</p>
+              <p>Biaya Pengiriman</p>
               {/* Jika keranjang kosong, biaya pengiriman 0 */}
               <p>Rp{getTotalCartAmount() === 0 ? 0 : deliveryFee}</p>
             </div>
             <hr />
             <div className="cart-total-details">
-              <b>Total</b>
+              <b>Total Pembayaran</b>
               {/* Total akhir setelah ditambah biaya pengiriman */}
               <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + deliveryFee}</b>
             </div>
@@ -85,9 +85,9 @@ const Cart = () => {
         {/* Menampilkan input untuk kode promo */}
         <div className="cart-promocode">
           <div>
-            <p>If you have promo code, enter it here</p>
+            <p>Jika Anda memiliki kode voucher, masukkan di sini</p>
             <div className='cart-promocode-input'>
-              <input type="text" placeholder='promo code' />
+              <input type="text" placeholder='kode voucher' />
               <button>Submit</button>
             </div>
           </div>

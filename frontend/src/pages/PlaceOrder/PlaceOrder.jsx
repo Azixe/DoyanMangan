@@ -17,10 +17,9 @@ const PlaceOrder = () => {
     firstName: "",
     lastName: "",
     email: "",
-    street: "",
-    city: "",
-    state: "",
-    country: "",
+    locationDetails: "",
+    address: "",
+    patokan: "",
     phone: "",
   });
 
@@ -101,7 +100,7 @@ const PlaceOrder = () => {
     // Form untuk mengumpulkan informasi pengiriman dan menampilkan total cart.
     <form onSubmit={placeOrder} className="place-order">
       <div className="place-order-left">
-        <p className="title">Delivery Information</p> {/* Judul untuk bagian informasi pengiriman */}
+        <p className="title">Informasi Pengiriman</p> {/* Judul untuk bagian informasi pengiriman */}
         <div className="multi-fields">
           <input
             required
@@ -109,7 +108,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             value={data.firstName}
             type="text"
-            placeholder="First name"
+            placeholder="Nama Depan"
           />
           <input
             required
@@ -117,7 +116,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             value={data.lastName}
             type="text"
-            placeholder="Last name"
+            placeholder="Nama Belakang"
           />
         </div>
         <input
@@ -130,63 +129,55 @@ const PlaceOrder = () => {
         />
         <input
           required
-          name="street"
+          name="address"
           onChange={onChangeHandler}
-          value={data.street}
+          value={data.address}
           type="text"
-          placeholder="Street"
+          placeholder="Alamat"
         />
         <div className="multi-fields">
           <input
             required
-            name="city"
+            name="locationDetails"
             onChange={onChangeHandler}
-            value={data.city}
+            value={data.locationDetails}
             type="text"
-            placeholder="City"
+            placeholder="Detail Lokasi"
           />
           <input
             required
-            name="state"
+            name="patokan"
             onChange={onChangeHandler}
-            value={data.state}
+            value={data.patokan}
             type="text"
-            placeholder="State"
+            placeholder="Patokan"
           />
         </div>
-        <input
-          required
-          name="country"
-          onChange={onChangeHandler}
-          value={data.country}
-          type="text"
-          placeholder="Country"
-        />
         <input
           required
           name="phone"
           onChange={onChangeHandler}
           value={data.phone}
           type="text"
-          placeholder="Phone"
+          placeholder="No HP"
         />
       </div>
       <div className="place-order-right">
         <div className="cart-total">
-          <h2>Cart Totals</h2>
+          <h2>Total Keranjang</h2>
           <div>
             <div className="cart-total-details">
-              <p>Subtotal</p>
+              <p>Harga</p>
               <p>Rp{getTotalCartAmount()}</p>
             </div>
             <hr />
             <div className="cart-total-details">
-              <p>Delivery Fee</p>
+              <p>Biaya Pengiriman</p>
               <p>Rp{getTotalCartAmount() === 0 ? 0 : deliveryFee}</p>
             </div>
             <hr />
             <div className="cart-total-details">
-              <b>Total</b>
+              <b>Total Pembayaran</b>
               <b>Rp{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + deliveryFee}</b>
             </div>
           </div>
