@@ -14,7 +14,7 @@ const ResetPassword = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('https://doyanmangan.web.id/api/user/reset-password', { email });
+            const response = await axios.post('http://localhost:4000/api/user/reset-password', { email });
             if (response.data.success) {
                 setMessage('A password reset link has been sent to your email!');
                 setTimeout(() => navigate('/'), 3000);
