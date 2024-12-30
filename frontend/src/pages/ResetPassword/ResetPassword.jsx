@@ -24,12 +24,18 @@ const ResetPassword = () => {
         setLoading(true); // Mengatur status loading menjadi true saat request dimulai
 
         try {
+<<<<<<< HEAD
             // Mengirim request POST ke endpoint reset-password dengan email pengguna
             const response = await axios.post(url + "/api/user/reset-password", { email });
 
             if (response.data.success) { // Jika respon dari server menunjukkan keberhasilan
                 setMessage('A password reset link has been sent to your email!'); // Menampilkan pesan sukses
                 // Mengarahkan pengguna ke halaman awal setelah 3 detik
+=======
+            const response = await axios.post('http://localhost:4000/api/user/reset-password', { email });
+            if (response.data.success) {
+                setMessage('A password reset link has been sent to your email!');
+>>>>>>> 721648e6740643978a63c7084faa4e67a17f8dc4
                 setTimeout(() => navigate('/'), 3000);
             } else {
                 // Jika respon dari server menunjukkan kegagalan, tampilkan pesan error dari server

@@ -39,10 +39,14 @@ const UpdatePassword = () => {
     if (!validatePassword()) return;
 
     try {
+<<<<<<< HEAD
       // Mengirimkan request ke API untuk memperbarui password.
       const response = await axios.post(url + "/api/user/update-password", { token, password });
 
       // Jika password berhasil diperbarui, menampilkan pesan sukses dan mengarahkan pengguna.
+=======
+      const response = await axios.post("http://localhost:4000/api/user/update-password", { token, password });
+>>>>>>> 721648e6740643978a63c7084faa4e67a17f8dc4
       if (response.data.success) {
         setMessage("Password updated successfully!");
         setTimeout(() => navigate("/"), 2000); // Navigasi ke halaman utama setelah 2 detik.
