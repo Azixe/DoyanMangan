@@ -7,7 +7,7 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
     // State untuk menyimpan item di keranjang belanja
     const [cartItems, setCartItems] = useState({});
-    const url = "http://localhost:4000"; // URL dasar API
+    const url = "https://doyanmangan.web.id/api/"; // URL dasar API
     const [token, setToken] = useState(""); // State untuk menyimpan token autentikasi
     const [food_list, setFoodList] = useState([]); // State untuk menyimpan daftar makanan
 
